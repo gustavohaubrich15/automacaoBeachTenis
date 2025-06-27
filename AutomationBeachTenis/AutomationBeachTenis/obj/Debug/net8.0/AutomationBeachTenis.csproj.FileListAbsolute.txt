@@ -35,3 +35,4 @@ C:\Users\haubr\source\repos\automacaoBeachTenis\AutomationBeachTenis\AutomationB
 C:\Users\haubr\source\repos\automacaoBeachTenis\AutomationBeachTenis\AutomationBeachTenis\obj\Debug\net8.0\AutomationBeachTenis.pdb
 C:\Users\haubr\source\repos\automacaoBeachTenis\AutomationBeachTenis\AutomationBeachTenis\obj\Debug\net8.0\AutomationBeachTenis.genruntimeconfig.cache
 C:\Users\haubr\source\repos\automacaoBeachTenis\AutomationBeachTenis\AutomationBeachTenis\obj\Debug\net8.0\ref\AutomationBeachTenis.dll
+C:\Users\haubr\source\repos\automacaoBeachTenis\AutomationBeachTenis\AutomationBeachTenis\bin\Debug\net8.0\Telegram.Bot.dll

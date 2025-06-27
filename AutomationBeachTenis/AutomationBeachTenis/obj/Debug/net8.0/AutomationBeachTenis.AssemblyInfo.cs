@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AutomationBeachTenis")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bd7f5bad615f3b14b39b749911fdc75f8ad680f2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bb256002d27ae849ffed9a91d009ef8f7c8cb344")]
 [assembly: System.Reflection.AssemblyProductAttribute("AutomationBeachTenis")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AutomationBeachTenis")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

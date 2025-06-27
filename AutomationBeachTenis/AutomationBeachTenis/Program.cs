@@ -1,5 +1,6 @@
 using AutomationBeachTenis.Services.GenericApiService;
 using AutomationBeachTenis.Services.MatchDayBeachTenisService;
+using AutomationBeachTenis.Services.TelegramService;
 using AutomationBeachTenis.Services.TournamentService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<IGenericApiService, GenericApiService>();
 builder.Services.AddScoped<ITournamentService, TournamentService>();
 builder.Services.AddScoped<IMatchDayBeachTenisService, MatchDayBeachTenisService>();
+builder.Services.AddScoped<ITelegramService, TelegramService>();
 
 var app = builder.Build();
 

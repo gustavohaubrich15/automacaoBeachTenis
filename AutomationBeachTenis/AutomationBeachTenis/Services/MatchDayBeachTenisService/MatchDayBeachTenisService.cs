@@ -1,5 +1,7 @@
-﻿using AutomationBeachTenis.Response;
+﻿using System.Text;
+using AutomationBeachTenis.Response;
 using AutomationBeachTenis.Services.GenericApiService;
+using AutomationBeachTenis.Services.TelegramService;
 using AutomationBeachTenis.Services.TournamentService;
 
 namespace AutomationBeachTenis.Services.MatchDayBeachTenisService
@@ -9,18 +11,21 @@ namespace AutomationBeachTenis.Services.MatchDayBeachTenisService
         private readonly ILogger<MatchDayBeachTenisService> _logger;
         private readonly IGenericApiService _genericApiService;
         private readonly ITournamentService _tournamentService;
+        private readonly ITelegramService _telegramService;
         private readonly IConfiguration _configuration;
         private string UrlITFBeachMatch => $"{_configuration["ITFBeach:TournamentOrderOfPlayApi"]}";
 
         public MatchDayBeachTenisService(ILogger<MatchDayBeachTenisService> logger,
             IGenericApiService genericApiService,
             ITournamentService tournamentService,
+            ITelegramService telegramService,
             IConfiguration configuration)
         {
 
             _logger = logger;
             _genericApiService = genericApiService;
             _tournamentService = tournamentService;
+            _telegramService = telegramService;
             _configuration = configuration;
         }
 
@@ -35,53 +40,58 @@ namespace AutomationBeachTenis.Services.MatchDayBeachTenisService
                 foreach (var tournament in tournamentList)
                 {
                     _logger.LogInformation($"Processando torneio: {tournament.TournamentName} - {tournament.Category}");
-                    await ProcessTournamentMatches(tournament);
+                    var message = await ProcessTournamentMatches(tournament);
+                    if(message != null)
+                    {
+                       await _telegramService.SendMessageTelegramToChannel(message);
+                    }
                 }
             }
         }
 
-        private async Task ProcessTournamentMatches(ResponseTournament tournament)
+        private async Task<StringBuilder> ProcessTournamentMatches(ResponseTournament tournament)
         {
             var matchCourtList = await GetMatchDayTournamentWTAFromGenericApi(tournament);
-
+            var message = new StringBuilder();
             if (matchCourtList.Any())
             {
-                _logger.LogInformation(tournament.PromotionalName);
-                _logger.LogInformation(tournament.TournamentName);
-                _logger.LogInformation($"{tournament.Location}, {tournament.HostNation}  --  Prize Money: {tournament.PrizeMoney} ");
-                _logger.LogInformation($"Jogos do dia de {DateTime.Now.ToString("dd/mm/yyyyy")}");
+                message.AppendLine(tournament.PromotionalName);
+                message.AppendLine(tournament.TournamentName);
+                message.AppendLine($"{tournament.Location}, {tournament.HostNation}  --  Prize Money: {tournament.PrizeMoney}");
+                message.AppendLine($"Jogos do dia de {DateTime.Now:dd/MM/yyyy}");
+                message.AppendLine();
             }
             bool firstPlayer = true;
             int teamSequence = 1;
 
             foreach (var matchCourt in matchCourtList)
             {
-                _logger.LogInformation("");
-                _logger.LogInformation(matchCourt.CourtName);
+                message.AppendLine($"Quadra: {matchCourt.CourtName}");
                 foreach (var match in matchCourt.Matches)
                 {
-                    _logger.LogInformation("");
-                    _logger.LogInformation("--------------------------");
-                    _logger.LogInformation($"{match.RoundGroupDesc}, {match.EventDesc}");
-                    _logger.LogInformation($"{match.Schedule}");
+                    message.AppendLine();
+                    message.AppendLine("--------------------------");
+                    message.AppendLine($"{match.RoundGroupDesc}, {match.EventDesc}");
+                    message.AppendLine($"{match.Schedule}");
                     teamSequence = 1;
                     foreach (var team in match.Teams)
                     {
                         firstPlayer = true;
                         foreach (var player in team.Players)
                         {
-                            _logger.LogInformation($"{player.Nationality} {player.GivenName} {player.FamilyName} {(team.IsWinner && firstPlayer ? "✔️" : "")}   {(firstPlayer ? string.Join(" ", team.Scores.Select(a => a?.ScoreValue)) : "")}");
+                            message.AppendLine($"{player.Nationality} {player.GivenName} {player.FamilyName} {(team.IsWinner && firstPlayer ? "✔️" : "")}   {(firstPlayer ? string.Join(" ", team.Scores.Select(a => a?.ScoreValue)) : "")}");
                             firstPlayer = false;
                         }
                         if(teamSequence == 1)
                         {
-                            _logger.LogInformation("VS");
+                            message.AppendLine("VS");
                         }
                         teamSequence++;
                     }
                     
                 }
             }
+            return message;
         }
 
 
