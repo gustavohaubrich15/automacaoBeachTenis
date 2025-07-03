@@ -32,6 +32,10 @@ jobs:
           sed -i 's|"ChatId": ".*"|"ChatId": "'"${TELEGRAM_CHAT_ID}"'"|g' ${{ env.PUBLISH_DIR }}/appsettings.json
       - name: Ver conteúdo do appsettings.json publicado
         run: cat ${{ env.PUBLISH_DIR }}/appsettings.json
+      - name: Instalar dependência wkhtmltoimage
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wkhtmltopdf
       - name: Executar serviço diretamente via github actions
         run: |
           echo "Executando serviços para envio de mensagem telegram com argumento run-api-service-github-actions"
