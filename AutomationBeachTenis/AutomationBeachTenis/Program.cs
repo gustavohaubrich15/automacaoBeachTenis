@@ -19,13 +19,13 @@ builder.Services.AddScoped<ITelegramService, TelegramService>();
 var app = builder.Build();
 
 
-//if (args.Contains("run-api-service-github-actions"))
-//{
+if (args.Contains("run-api-service-github-actions"))
+{
     using var scope = app.Services.CreateScope();
     var matchDayBeachTenisService = scope.ServiceProvider.GetRequiredService<IMatchDayBeachTenisService>();
     await matchDayBeachTenisService.SendMatchListOfDayToTelegramChanel();
     return;
-//}
+}
 
 if (app.Environment.IsDevelopment())
 {
