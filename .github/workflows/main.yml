@@ -2,15 +2,16 @@ name: Publicar Projeto e Rodar Serviço 🚀
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 12 * * *'  
+    - cron: '0 13 * * *'  
 jobs:
   publish-and-run:
     runs-on: ubuntu-latest
     env:
       DOTNET_VERSION: '8.0.x'
-      PROJECT_PATH: './AutomationTennis/AutomationTennis.csproj'
+      PROJECT_PATH: './AutomationBeachTenis/AutomationBeachTenis.csproj'
       PUBLISH_DIR: './publish'
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -24,17 +25,14 @@ jobs:
         run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release --no-restore
       - name: Publicar projeto
         run: dotnet publish ${{ env.PROJECT_PATH }} --configuration Release --output ${{ env.PUBLISH_DIR }}
-      - name: Criar pasta Context no publish (se não existir)
-        run: mkdir -p ${{ env.PUBLISH_DIR }}/Context
-      - name: Copiar banco SQLite para a pasta publish
-        run: cp AutomationTennis/Context/automationTennis.db ${{ env.PUBLISH_DIR }}/Context/automationTennis.db
-      - name: Atualizar Slack Webhook URL no appsettings.json
-        run: |
-          echo "Atualizando WebhookUrlChannelWTA no appsettings.json"
-          sed -i 's|"WebhookUrlChannelWTA": ".*"|"WebhookUrlChannelWTA": "'"${SLACK_WEBHOOK_URL}"'"|g' ${{ env.PUBLISH_DIR }}/appsettings.json
+      - name: Atualizar tokens Telegram no appsettings.json
+        run: | 
+          echo "Atualizando BotToken e ChatId no appsettings.json"
+          sed -i 's|"BotToken": ".*"|"BotToken": "'"${TELEGRAM_BOT_TOKEN}"'"|g' ${{ env.PUBLISH_DIR }}/appsettings.json
+          sed -i 's|"ChatId": ".*"|"ChatId": "'"${TELEGRAM_CHAT_ID}"'"|g' ${{ env.PUBLISH_DIR }}/appsettings.json
       - name: Ver conteúdo do appsettings.json publicado
         run: cat ${{ env.PUBLISH_DIR }}/appsettings.json
       - name: Executar serviço diretamente via github actions
         run: |
-          echo "Executando serviços para envio de mensagem slack com argumento run-api-service-github-actions"
+          echo "Executando serviços para envio de mensagem telegram com argumento run-api-service-github-actions"
           dotnet ${{ env.PUBLISH_DIR }}/AutomationTennis.dll run-api-service-github-actions
