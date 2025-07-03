@@ -35,4 +35,4 @@ jobs:
       - name: Executar serviço diretamente via github actions
         run: |
           echo "Executando serviços para envio de mensagem telegram com argumento run-api-service-github-actions"
-          dotnet ${{ env.PUBLISH_DIR }}/AutomationTennis.dll run-api-service-github-actions
+          dotnet ${{ env.PUBLISH_DIR }}/AutomationBeachTenis.dll run-api-service-github-actions
