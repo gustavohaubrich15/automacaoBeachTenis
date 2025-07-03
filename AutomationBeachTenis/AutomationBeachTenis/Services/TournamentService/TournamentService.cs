@@ -82,7 +82,7 @@ namespace AutomationBeachTenis.Services.TournamentService
         private void AdjustDateApiITF()
         {
             var currentDate = DateTime.Now;
-            FromDateApiITFBeach = $"{currentDate.Year}-{currentDate.Month:D2}-20";
+            FromDateApiITFBeach = $"{currentDate.Year}-06-20";
             ToDateApiITFBeach = $"{currentDate.Year}-{currentDate.Month:D2}-{currentDate.Day:D2}";
         }
 
