@@ -54,8 +54,8 @@ namespace AutomationBeachTenis.Services.TournamentService
                 if (response != null)
                 {
                     var orderOfDayTodayId = response.Where(a => a.PlayDate.Day == DateTime.Now.Day
-                                                               // && a.PlayDate.Month == DateTime.Now.Month
-                                                                //&& a.PlayDate.Year == DateTime.Now.Year).FirstOrDefault();
+                                                                && a.PlayDate.Month == DateTime.Now.Month
+                                                                && a.PlayDate.Year == DateTime.Now.Year).FirstOrDefault();
 
                     if (orderOfDayTodayId != null)
                     {
