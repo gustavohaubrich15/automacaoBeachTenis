@@ -53,12 +53,9 @@ namespace AutomationBeachTenis.Services.TournamentService
                 var response = await _genericApiService.GetAsync<List<ResponseTournamentOrderOfPlay>>(urlOrderOfPlayTournamentAdjust);
                 if (response != null)
                 {
-                    //var orderOfDayTodayId = response.Where(a => a.PlayDate.Day == DateTime.Now.Day
+                    var orderOfDayTodayId = response.Where(a => a.PlayDate.Day == DateTime.Now.Day
                                                                // && a.PlayDate.Month == DateTime.Now.Month
                                                                 //&& a.PlayDate.Year == DateTime.Now.Year).FirstOrDefault();
-                   var orderOfDayTodayId = response.Where(a => a.PlayDate.Day == 19
-                                                                && a.PlayDate.Month == 6
-                                                                && a.PlayDate.Year == 2025).FirstOrDefault();
 
                     if (orderOfDayTodayId != null)
                     {
@@ -82,7 +79,7 @@ namespace AutomationBeachTenis.Services.TournamentService
         private void AdjustDateApiITF()
         {
             var currentDate = DateTime.Now;
-            FromDateApiITFBeach = $"{currentDate.Year}-06-20";
+            FromDateApiITFBeach = $"{currentDate.Year}-{currentDate.Month:D2}-{currentDate.Day:D2}";
             ToDateApiITFBeach = $"{currentDate.Year}-{currentDate.Month:D2}-{currentDate.Day:D2}";
         }
 
