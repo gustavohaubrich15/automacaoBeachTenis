@@ -36,21 +36,27 @@ namespace AutomationBeachTenis.Services.MatchDayBeachTenisService
 
         public async Task SendMatchListOfDayToTelegramChanel()
         {
-            var responseTournamentList = await _tournamentService.GetListTournamentOfDayFromGenericApi();
-            var tournamentList = responseTournamentList.TournamentList;
-
-            if (tournamentList != null)
+            var message = new StringBuilder();
+            message.AppendLine($"🥱 <b>Nenhuma partida para o dia de hoje</b>");
+            try
             {
-                foreach (var tournament in tournamentList)
+                var responseTournamentList = await _tournamentService.GetListTournamentOfDayFromGenericApi();
+                var tournamentList = responseTournamentList.TournamentList;
+            
+                if (tournamentList != null)
                 {
-                    _logger.LogInformation($"Processando torneio: {tournament.TournamentName} - {tournament.Category}");
-                    await ProcessTournamentMatches(tournament);
+                    foreach (var tournament in tournamentList)
+                    {
+                        _logger.LogInformation($"Processando torneio: {tournament.TournamentName} - {tournament.Category}");
+                        await ProcessTournamentMatches(tournament);
+                    }
+                }
+                else
+                {
+                    await _telegramService.SendMessageTelegramToChannel(message);
                 }
             }
-            else
-            {
-                var message = new StringBuilder();
-                message.AppendLine($"🥱 Nenhuma de beach tenis partida para o dia de hoje");
+            catch (Exception ex) {
                 await _telegramService.SendMessageTelegramToChannel(message);
             }
         }
