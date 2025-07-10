@@ -43,7 +43,7 @@ namespace AutomationBeachTenis.Services.MatchDayBeachTenisService
                 var responseTournamentList = await _tournamentService.GetListTournamentOfDayFromGenericApi();
                 var tournamentList = responseTournamentList.TournamentList;
             
-                if (tournamentList != null)
+                if (tournamentList.Any())
                 {
                     foreach (var tournament in tournamentList)
                     {
