@@ -47,6 +47,12 @@ namespace AutomationBeachTenis.Services.MatchDayBeachTenisService
                     await ProcessTournamentMatches(tournament);
                 }
             }
+            else
+            {
+                var message = new StringBuilder();
+                message.AppendLine($"🥱 Nenhuma de beach tenis partida para o dia de hoje");
+                await _telegramService.SendMessageTelegramToChannel(message);
+            }
         }
 
         private async Task ProcessTournamentMatches(ResponseTournament tournament)
