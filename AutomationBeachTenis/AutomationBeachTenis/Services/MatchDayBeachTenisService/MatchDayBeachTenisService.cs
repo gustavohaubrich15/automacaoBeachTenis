@@ -117,14 +117,18 @@ namespace AutomationBeachTenis.Services.MatchDayBeachTenisService
                         html.AppendLine("    <div class=\"avatars\">");
                         foreach (var player in team.Players)
                         {
-                            html.AppendLine($"      <div class=\"avatar\"><img src=\"https://i.pravatar.cc/40?u={player.GivenName}\" /></div>");
+                            var givenName = string.IsNullOrWhiteSpace(player?.GivenName) ? "" : player.GivenName;
+                            html.AppendLine($"      <div class=\"avatar\"><img src=\"https://i.pravatar.cc/40?u={givenName}\" /></div>");
                         }
                         html.AppendLine("    </div>");
                         html.AppendLine("    <div class=\"player-info\">");
                         foreach (var player in team.Players)
                         {
+                            var givenName = string.IsNullOrWhiteSpace(player?.GivenName) ? "" : player.GivenName;
+                            var familyName = string.IsNullOrWhiteSpace(player?.FamilyName) ? "" : player.FamilyName;
+                            var nationality = string.IsNullOrWhiteSpace(player?.Nationality) ? "xx" : player.Nationality.ToLower();
                             html.AppendLine("      <div class=\"player-name\">");
-                            html.AppendLine($"        <span class=\"flag-name\"><img class=\"flag\" src=\"https://flagcdn.com/w20/{ToFlagString(player.Nationality.ToLower())}.png\" /> {ToTitleCase(player.GivenName)} {ToTitleCase(player.FamilyName)}</span>");
+                            html.AppendLine($"        <span class=\"flag-name\"><img class=\"flag\" src=\"https://flagcdn.com/w20/{ToFlagString(nationality)}.png\" /> {ToTitleCase(givenName)} {ToTitleCase(familyName)}</span>");
                             html.AppendLine("        <span class=\"ranking\"></span>");
                             html.AppendLine("      </div>");
                         }
